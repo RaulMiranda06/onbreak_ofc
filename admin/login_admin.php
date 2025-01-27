@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['permissao'] = $usuario['permissao']; // Armazena a permissão do usuário (admin ou usuario)
             
             // Redireciona para a página principal (pode ser uma área restrita)
-            header('Location: dashboard_admin.php');
+            header('Location: index.php');
             exit();
         } else {
             $_SESSION['error'] = "E-mail ou senha incorretos.";

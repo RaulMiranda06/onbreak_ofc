@@ -12,7 +12,7 @@
         <div class="header-container">
             <!-- Logo -->
             <div class="logo">
-                <a href="index.php">
+                <a href="../public/index.php">
                     <img src="../img/logo.png" alt="Logo OnBreak Lanches" />
                 </a>
             </div>
@@ -25,13 +25,13 @@
             <!-- Navegação -->
             <nav class="nav-links" id="nav-links">
                 <ul>
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="../public/index.php">Home</a></li>
                     <li><a href="perfil.php">Meu Perfil</a></li>
                     <li><a href="meus_pedidos.php">Meus Pedidos</a></li>
-                    <li><a href="formas_de_pagamentos.php">Formas de Pagamentos</a></li>
+                    <li><a href="../public/index.php">Formas de Pagamentos</a></li>
                     <li><a href="minhas_avaliacoes.php">Minhas Avaliações</a></li>
                     <li><a href="ajuda.php">Ajuda</a></li>
-                    <li><a href="logout.php">Sair</a></li>
+                    <li><a href="../public/logout.php">Sair</a></li>
                 </ul>
             </nav>
 
@@ -47,10 +47,10 @@
     <div class="banner_principal">
         <div class="banner-content">
             <div class="banner-item">
-                <img src="img/sucologo.png" alt="Logo da Sucologo, marca de sucos da OnBreak Lanches">
+                <img src="../img/sucologo.png" alt="Logo da Sucologo, marca de sucos da OnBreak Lanches">
             </div>
             <div class="banner-item">
-                <img src="img/coxinhalogo.png" alt="Logo da CoxinhaLogo, marca de coxinhas da OnBreak Lanches">
+                <img src="../img/coxinhalogo.png" alt="Logo da CoxinhaLogo, marca de coxinhas da OnBreak Lanches">
             </div>
         </div>
     </div>

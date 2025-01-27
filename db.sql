@@ -3,11 +3,10 @@ CREATE DATABASE sistema_lanche;
 
 USE sistema_lanche;
 
-CREATE TABLE `usuarios` (
+CREATE TABLE `clientes` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `senha` varchar(255) NOT NULL,
-  `permissao` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `criado_em` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

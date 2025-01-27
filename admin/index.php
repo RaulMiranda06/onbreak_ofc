@@ -4,7 +4,7 @@ session_start();
 // Verifica se o usuário está logado e tem permissão de admin
 if ($_SESSION['permissao'] != 'admin') {
     // Se não for admin, redireciona para a página inicial
-    header('Location: ../public/index.php');
+    header('Location: login_admin.php');
     exit();
 }
 

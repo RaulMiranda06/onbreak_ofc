@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $mensagem = exibirMensagem('Somente imagens JPG e PNG são permitidas.', 'error');
                     } else {
                         // Pasta para salvar as imagens
-                        $pasta = "uploads/";
+                        $pasta = "../uploads/";
 
                         // Gerar um nome único para a imagem
                         $novoNomeImagem = uniqid() . '.' . $extensao;
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $stmt->bindParam(':nome', $nome);
                             $stmt->bindParam(':descricao', $descricao);
                             $stmt->bindParam(':preco', $preco);
-                            $stmt->bindParam(':imagem', $path); // Caminho da imagem no banco
+                            $stmt->bindParam(':imagem', $novoNomeImagem); // Caminho da imagem no banco
 
                             // Executar a query e verificar sucesso
                             if ($stmt->execute()) {

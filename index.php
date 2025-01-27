@@ -1,12 +1,28 @@
 <?php
+session_start(); // Inicia a sessão
+
+// Verifica se o usuário está autenticado
+if (!isset($_SESSION['usuario_id'])) {
+    // Se não estiver autenticado, redireciona para a página de login
+    header('Location: login_usuario.php');
+    exit();
+}
+
+// O código da sua página vai abaixo, caso o usuário esteja autenticado
+?>
+
+<?php
 // Inclui a conexão com o banco de dados
-include("../includes/conexao.php");
-include('../includes/header.php');
+include("includes/conexao.php");
+include('includes/header.php');
 
 // Query para pegar os dados dos lanches
 $query = "SELECT * FROM lanches";
 $stmt = $pdo->query($query); // Executa a query
 $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -103,7 +119,7 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
                 <div class="product-card">
                     <div class="product-image">
                         <!-- Exibe a imagem do produto -->
-                        <img src="uploads/<?php echo htmlspecialchars($lanche['imagem']); ?>" alt="Imagem do Produto">
+                        <img src="/uploads/<?php echo htmlspecialchars($lanche['imagem']); ?>" alt="Imagem do Produto">
                     </div>
                     <div class="product-info">
                         <h3 class="product-name"><?php echo htmlspecialchars($lanche['nome']); ?></h3>
@@ -115,7 +131,7 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
         </div>
     </div>
 
-    <?php include('../includes/footer.php'); ?>
+    <?php include('includes/footer.php'); ?>
 
 </body>
 </html>

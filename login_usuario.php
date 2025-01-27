@@ -17,40 +17,27 @@ try {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
-    $confirmar_senha = $_POST['confirmar_senha'];
-    $permissao = $_POST['permissao']; // Recebe o valor de permissão
 
     // Validação de campos
-    if (empty($email) || empty($senha) || empty($confirmar_senha) || empty($permissao)) {
+    if (empty($email) || empty($senha)) {
         $_SESSION['error'] = "Por favor, preencha todos os campos.";
-    } elseif ($senha !== $confirmar_senha) {
-        $_SESSION['error'] = "As senhas não coincidem.";
     } else {
-        // Verifica se o e-mail já existe no banco de dados
+        // Verifica se o e-mail existe no banco de dados
         $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($usuario) {
-            $_SESSION['error'] = "Este e-mail já está cadastrado.";
+        if ($usuario && password_verify($senha, $usuario['senha'])) {
+            // A senha está correta
+            $_SESSION['usuario_id'] = $usuario['id']; // Armazena o ID do usuário na sessão
+            $_SESSION['usuario_email'] = $usuario['email']; // Armazena o e-mail do usuário na sessão
+            
+            // Redireciona para a página principal (pode ser uma área restrita)
+            header('Location: index.php');
+            exit();
         } else {
-            // Criptografa a senha
-            $senha_hash = password_hash($senha, PASSWORD_BCRYPT);
-
-            // Insere o novo usuário no banco de dados com a permissão selecionada
-            $stmt = $pdo->prepare("INSERT INTO usuarios (email, senha, permissao) VALUES (:email, :senha, :permissao)");
-            $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':senha', $senha_hash);
-            $stmt->bindParam(':permissao', $permissao);
-
-            if ($stmt->execute()) {
-                $_SESSION['success'] = "Usuário cadastrado com sucesso!";
-                header('Location: login_usuario.php'); // Redireciona para a página de login
-                exit();
-            } else {
-                $_SESSION['error'] = "Erro ao cadastrar o usuário.";
-            }
+            $_SESSION['error'] = "E-mail ou senha incorretos.";
         }
     }
 }
@@ -61,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Usuário</title>
+    <title>Login - Usuário</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -101,15 +88,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .input-group input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        .input-group select {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -169,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <h2>Cadastrar Usuário</h2>
+        <h2>Login Usuário</h2>
 
         <?php
         if (isset($_SESSION['error'])) {
@@ -191,23 +169,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="senha">Senha</label>
                 <input type="password" name="senha" id="senha" required>
             </div>
-            <div class="input-group">
-                <label for="confirmar_senha">Confirmar Senha</label>
-                <input type="password" name="confirmar_senha" id="confirmar_senha" required>
-            </div>
 
-            <div class="input-group">
-                <label for="permissao">Permissão</label>
-                <select name="permissao" id="permissao" required>
-                    <option value="usuario">Usuário</option>
-                </select>
-            </div>
-
-            <button class="button" type="submit">Cadastrar</button>
+            <button class="button" type="submit">Entrar</button>
         </form>
 
         <div class="footer">
-            <p>Já tem uma conta? <a href="login_usuario.php">Faça login aqui</a></p>
+            <p>Não tem uma conta? <a href="cadastro_usuario.php">Cadastre-se aqui</a></p>
         </div>
     </div>
 </body>
