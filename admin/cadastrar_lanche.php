@@ -1,5 +1,5 @@
 <?php
-include("../includes/conexao.php"); // Inclui a conexão com o banco de dados
+include("conexao.php"); // Inclui a conexão com o banco de dados
 
 // Função para exibir mensagens de erro ou sucesso
 function exibirMensagem($mensagem, $tipo = 'error') {
@@ -238,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
 
         <!-- Botão para voltar ao dashboard -->
-        <a href="dashboard_admin.php" class="back-button">Voltar para o Início</a>
+        <a href="index.php" class="back-button">Voltar para o Início</a>
     </div>
 </body>
 </html>

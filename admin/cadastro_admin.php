@@ -1,28 +1,18 @@
 <?php
 session_start(); // Inicia a sessão
 
-// Conexão com o banco de dados
-$host = 'localhost';
-$dbname = 'sistema_lanche';
-$username = 'root';
-$password = '';
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco de dados: " . $e->getMessage());
-}
+include('conexao.php'); // Corrigido para "include"
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
     $confirmar_senha = $_POST['confirmar_senha'];
-    $permissao = $_POST['permissao']; // Recebe o valor de permissão
 
     // Validação de campos
-    if (empty($email) || empty($senha) || empty($confirmar_senha) || empty($permissao)) {
+    if (empty($email) || empty($senha) || empty($confirmar_senha)) {
         $_SESSION['error'] = "Por favor, preencha todos os campos.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['error'] = "E-mail inválido.";
     } elseif ($senha !== $confirmar_senha) {
         $_SESSION['error'] = "As senhas não coincidem.";
     } else {
@@ -38,11 +28,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Criptografa a senha
             $senha_hash = password_hash($senha, PASSWORD_BCRYPT);
 
-            // Insere o novo usuário no banco de dados com a permissão selecionada
-            $stmt = $pdo->prepare("INSERT INTO usuarios (email, senha, permissao) VALUES (:email, :senha, :permissao)");
+            // Insere o novo usuário no banco de dados
+            $stmt = $pdo->prepare("INSERT INTO usuarios (email, senha) VALUES (:email, :senha)");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':senha', $senha_hash);
-            $stmt->bindParam(':permissao', $permissao);
 
             if ($stmt->execute()) {
                 $_SESSION['success'] = "Usuário cadastrado com sucesso!";
@@ -109,15 +98,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-sizing: border-box;
         }
 
-        .input-group select {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
         .button {
             width: 100%;
             padding: 15px;
@@ -169,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <h2>Cadastrar Adminstrador</h2>
+        <h2>Cadastrar Administrador</h2>
 
         <?php
         if (isset($_SESSION['error'])) {
@@ -194,14 +174,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="input-group">
                 <label for="confirmar_senha">Confirmar Senha</label>
                 <input type="password" name="confirmar_senha" id="confirmar_senha" required>
-            </div>
-
-            <div class="input-group">
-                <label for="permissao">Permissão</label>
-                <select name="permissao" id="permissao" required>
-                    <option value="usuario">Usuário</option>
-                    <option value="admin">Admin</option>
-                </select>
             </div>
 
             <button class="button" type="submit">Cadastrar</button>

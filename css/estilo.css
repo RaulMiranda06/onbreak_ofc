@@ -50,7 +50,7 @@ header .logo img {
 .banner_principal {
     width: 100%;
     background-color: #FF6200; /* Cor de fundo do banner */
-    padding: 45px 0;
+    padding: 100px 0;
     text-align: center;
 }
 
@@ -59,7 +59,7 @@ header .logo img {
     justify-content: center; /* Alinha os itens no centro */
     align-items: center; /* Alinha verticalmente no centro */
     gap: 20px; /* Espaço entre as imagens */
-    max-width: 1200px; /* Limita a largura máxima */
+    max-width: 2000px; /* Limita a largura máxima */
     margin: 0 auto; /* Centraliza o conteúdo */
     padding: 0 20px; /* Espaçamento interno */
 }

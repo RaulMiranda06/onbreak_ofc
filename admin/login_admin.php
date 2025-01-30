@@ -1,18 +1,7 @@
 <?php
 session_start(); // Inicia a sessão
 
-// Conexão com o banco de dados
-$host = 'localhost';
-$dbname = 'sistema_lanche';
-$username = 'root';
-$password = '';
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco de dados: " . $e->getMessage());
-}
+include("conexao.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -32,8 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // A senha está correta
             $_SESSION['usuario_id'] = $usuario['id']; // Armazena o ID do usuário na sessão
             $_SESSION['usuario_email'] = $usuario['email']; // Armazena o e-mail do usuário na sessão
-            $_SESSION['permissao'] = $usuario['permissao']; // Armazena a permissão do usuário (admin ou usuario)
-            
+
             // Redireciona para a página principal (pode ser uma área restrita)
             header('Location: index.php');
             exit();
@@ -49,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Usuário</title>
+    <title>Login - Administrador</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -148,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <h2>Login Adminstrador</h2>
+        <h2>Login Administrador</h2>
 
         <?php
         if (isset($_SESSION['error'])) {

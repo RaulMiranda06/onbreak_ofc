@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OnBreak Lanches</title>
-    <link rel="stylesheet" href="../css/estilo.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
 </head>
 <body>
     <header>
@@ -26,24 +26,13 @@
             <nav class="nav-links" id="nav-links">
                 <ul>
                     <li><a href="index.php">Home</a></li>
-                    <li><a href="perfil.php">Meu Perfil</a></li>
-                    <li><a href="meus_pedidos.php">Meus Pedidos</a></li>
-                    <li><a href="minhas_avaliacoes.php">Minhas Avaliações</a></li>
-                    <li><a href="ajuda.php">Ajuda</a></li>
+                    <li><a href="perfil_admin.php">Meu Perfil</a></li>
                     <li><a href="logout.php">Sair</a></li>
                 </ul>
             </nav>
 
-            <!-- Ícone do Carrinho Fora da Lista -->
-            <div class="cart-icon">
-                <a href="carrinho.php">
-                    <i class="fas fa-shopping-cart"></i> <!-- Ícone de carrinho do Font Awesome -->
-                </a>
-            </div>
-        </div>
+            
     </header>
-
-    
 
     <script>
         // Funcionalidade do menu hambúrguer

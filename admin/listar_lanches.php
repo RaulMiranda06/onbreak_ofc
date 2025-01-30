@@ -1,5 +1,5 @@
 <?php
-include("../includes/conexao.php"); // Inclui a conexão com o banco de dados
+include("conexao.php"); // Inclui a conexão com o banco de dados
 
 // Variáveis para mensagens de alerta
 $alertaMensagem = '';
@@ -299,7 +299,7 @@ if (isset($_GET['remover'])) {
         </div>
 
         <!-- Botão de Voltar -->
-        <a href="dashboard_admin.php" class="back-button">Voltar para o Início</a>
+        <a href="index.php" class="back-button">Voltar para o Início</a>
     </div>
 
     <script>

@@ -1,15 +1,8 @@
 <?php
 session_start();
 
-// Verifica se o usuário está logado e tem permissão de admin
-if ($_SESSION['permissao'] != 'admin') {
-    // Se não for admin, redireciona para a página inicial
-    header('Location: login_admin.php');
-    exit();
-}
-
 // Inclui o cabeçalho da página
-include('../includes/header.php');
+include('header.php');
 ?>
 
 <!DOCTYPE html>
@@ -19,23 +12,23 @@ include('../includes/header.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Administrativo</title>
     <link rel="stylesheet" href="../css/estilo.css"> <!-- Assumindo que o arquivo CSS está configurado -->
-    
 </head>
 <body>
+    <br><br><br><br><br><br><br><br><br>
     <div class="admin-container">
         <h1>Bem-vindo, Administrador!</h1>
         <p>Você tem acesso ao painel administrativo. Escolha uma das opções abaixo:</p>
 
-        <div class="admin-links">
+        <nav class="admin-links">
             <a href="listar_lanches.php">Ver Lanches</a>
             <a href="cadastrar_lanche.php">Cadastrar Lanche</a>
             <a href="gerenciar_usuarios.php">Gerenciar Usuários</a>
-        </div>
+        </nav>
     </div>
 
-
-    <br><br><br><br><br><br><br><br><br><br><br>
+    <!-- Espaçamento foi removido de <br> e adicionado com CSS -->
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <!-- Inclui o rodapé da página -->
-    <?php include('../includes/footer.php'); ?>  
+    <?php include('footer.php'); ?>
 </body>
 </html>

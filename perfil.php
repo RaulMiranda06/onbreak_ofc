@@ -1,31 +1,14 @@
 <?php
 session_start();
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['usuario_id'])) {
-    // Se não estiver logado, redireciona para a página de login
-    header('Location: login_usuario.php');
-    exit();
-}
 
-// Conexão com o banco de dados
-$host = 'localhost';
-$dbname = 'sistema_lanche';
-$username = 'root';
-$password = '';
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco de dados: " . $e->getMessage());
-}
+include('includes/conexao.php');
 
 // Obtém o ID do usuário logado a partir da sessão
 $usuario_id = $_SESSION['usuario_id'];
 
-// Busca os dados do usuário no banco de dados
-$stmt = $pdo->prepare("SELECT * FROM usuarios WHERE id = :id");
+// Busca os dados do usuário na tabela 'clientes'
+$stmt = $pdo->prepare("SELECT * FROM clientes WHERE id = :id");
 $stmt->bindParam(':id', $usuario_id);
 $stmt->execute();
 $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -50,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Se a senha foi fornecida, criptografa a nova senha
         $senha_hash = !empty($senha) ? password_hash($senha, PASSWORD_BCRYPT) : $usuario['senha'];
         
-        // Atualiza os dados do usuário no banco de dados
-        $stmt = $pdo->prepare("UPDATE usuarios SET email = :email, senha = :senha WHERE id = :id");
+        // Atualiza os dados do usuário no banco de dados na tabela 'clientes'
+        $stmt = $pdo->prepare("UPDATE clientes SET email = :email, senha = :senha WHERE id = :id");
         $stmt->bindParam(':email', $email);
         $stmt->bindParam(':senha', $senha_hash);
         $stmt->bindParam(':id', $usuario_id);
@@ -151,23 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .footer a:hover {
             text-decoration: underline;
-        }
-
-        .alert {
-            padding: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            border-radius: 5px;
-        }
-
-        .alert-success {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .alert-error {
-            background-color: #f44336;
-            color: white;
         }
 
         .button-back {

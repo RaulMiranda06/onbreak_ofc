@@ -1,18 +1,7 @@
 <?php
 session_start(); // Inicia a sessão
 
-// Conexão com o banco de dados
-$host = 'localhost';
-$dbname = 'sistema_lanche';
-$username = 'root';
-$password = '';
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco de dados: " . $e->getMessage());
-}
+include('includes/conexao.php'); // Corrigido para "include"
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -20,13 +9,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmar_senha = $_POST['confirmar_senha'];
 
     // Validação de campos
-    if (empty($email) || empty($senha) || empty($confirmar_senha) || empty($permissao)) {
+    if (empty($email) || empty($senha) || empty($confirmar_senha)) {
         $_SESSION['error'] = "Por favor, preencha todos os campos.";
     } elseif ($senha !== $confirmar_senha) {
         $_SESSION['error'] = "As senhas não coincidem.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['error'] = "Por favor, insira um e-mail válido.";
     } else {
         // Verifica se o e-mail já existe no banco de dados
-        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
+        $stmt = $pdo->prepare("SELECT * FROM clientes WHERE email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -37,16 +28,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Criptografa a senha
             $senha_hash = password_hash($senha, PASSWORD_BCRYPT);
 
-            // Insere o novo usuário no banco de dados com a permissão selecionada
-            $stmt = $pdo->prepare("INSERT INTO usuarios (email, senha, permissao) VALUES (:email, :senha, :permissao)");
+            // Insere o novo usuário na tabela 'clientes'
+            $stmt = $pdo->prepare("INSERT INTO clientes (email, senha) VALUES (:email, :senha)");
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':senha', $senha_hash);
-            
 
             if ($stmt->execute()) {
                 $_SESSION['success'] = "Usuário cadastrado com sucesso!";
                 header('Location: login_usuario.php'); // Redireciona para a página de login
-                exit();
+                exit(); // Garante que o código não continue a ser executado após o redirecionamento
             } else {
                 $_SESSION['error'] = "Erro ao cadastrar o usuário.";
             }
@@ -100,15 +90,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         .input-group input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        .input-group select {
             width: 100%;
             padding: 10px;
             font-size: 16px;
@@ -194,8 +175,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="confirmar_senha">Confirmar Senha</label>
                 <input type="password" name="confirmar_senha" id="confirmar_senha" required>
             </div>
-
-        
 
             <button class="button" type="submit">Cadastrar</button>
         </form>

@@ -1,18 +1,7 @@
 <?php
 session_start(); // Inicia a sessão
 
-// Conexão com o banco de dados
-$host = 'localhost';
-$dbname = 'sistema_lanche';
-$username = 'root';
-$password = '';
-
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro ao conectar ao banco de dados: " . $e->getMessage());
-}
+include("includes/conexao.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
@@ -22,8 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($email) || empty($senha)) {
         $_SESSION['error'] = "Por favor, preencha todos os campos.";
     } else {
-        // Verifica se o e-mail existe no banco de dados
-        $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE email = :email");
+        // Verifica se o e-mail existe no banco de dados na tabela 'clientes'
+        $stmt = $pdo->prepare("SELECT * FROM clientes WHERE email = :email");
         $stmt->bindParam(':email', $email);
         $stmt->execute();
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -34,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['usuario_email'] = $usuario['email']; // Armazena o e-mail do usuário na sessão
             
             // Redireciona para a página principal (pode ser uma área restrita)
+            $_SESSION['success'] = "Login realizado com sucesso!";
             header('Location: index.php');
             exit();
         } else {
