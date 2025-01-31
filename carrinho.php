@@ -1,17 +1,59 @@
 <?php
-session_start();
+session_start(); // Inicia a sessão
+
+// Inclui a conexão com o banco de dados
 include("includes/conexao.php");
 include('includes/header.php');
 
-// Query para pegar os dados dos produtos (lanches)
-$query = "SELECT * FROM lanches";
-$stmt = $pdo->query($query); // Executa a query
-$lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
+// Inicializa o carrinho, se ainda não estiver na sessão
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
 
+// Verifica se a ação de adicionar ao carrinho foi chamada
+if (isset($_GET['action']) && $_GET['action'] == 'add' && isset($_GET['id'])) {
+    $product_id = $_GET['id'];
+    // Verifica se o produto já está no carrinho
+    if (isset($_SESSION['cart'][$product_id])) {
+        $_SESSION['cart'][$product_id] += 1; // Incrementa a quantidade
+    } else {
+        $_SESSION['cart'][$product_id] = 1; // Adiciona o produto com quantidade 1
+    }
+}
+
+// Função para calcular o total do carrinho
+function calcular_total() {
+    global $pdo;
+    $total = 0;
+    foreach ($_SESSION['cart'] as $id => $quantidade) {
+        $stmt = $pdo->prepare("SELECT preco FROM lanches WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $lanche = $stmt->fetch();
+        if ($lanche) {
+            $total += $lanche['preco'] * $quantidade; // Calcula o total do produto
+        }
+    }
+    return $total;
+}
+
+// Verifica se o usuário deseja remover um item do carrinho
+if (isset($_GET['action']) && $_GET['action'] == 'remove' && isset($_GET['id'])) {
+    $product_id = $_GET['id'];
+    unset($_SESSION['cart'][$product_id]); // Remove o item do carrinho
+}
 
 ?>
-<style>
-        /* Estilos para a página */
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estilo.css">
+    <title>Carrinho de Compras</title>
+    <style>
+        /* Estilos para a página do carrinho */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -19,130 +61,139 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
             background-color: #f7f7f7;
         }
 
-        .page-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            flex-wrap: wrap;
+        .cart-container {
             padding: 20px;
             margin-top: 50px;
-        }
-
-        .product-card {
-            width: 200px;
-            margin: 15px;
-            padding: 15px;
+            width: 80%;
+            max-width: 1200px;
+            margin: auto;
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
         }
 
-        .product-card img {
-            height: auto;
-            width: 100px;  /* Definindo uma largura fixa */
-            max-width: 100%;  /* Garante que a largura não ultrapasse 100% do contêiner */
-            border-radius: 6px;
-            object-fit: cover;  /* Faz com que a imagem se ajuste sem distorção */
+        .cart-header {
+            font-size: 24px;
+            margin-bottom: 20px;
         }
 
-        .product-info {
-            margin-top: 10px;
+        .cart-items {
+            margin-bottom: 20px;
         }
 
-        .product-name {
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .cart-item-name {
             font-size: 18px;
-            color: #333;
-            margin-bottom: 8px;
+            flex: 1;
+            margin-left: 10px;
         }
 
-        .product-price {
-            font-size: 16px;
-            color: #f4511e;
-            font-weight: bold;
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
         }
 
-        .btn-buy {
-            padding: 10px 20px;
+        .quantity-btn {
+            padding: 5px 10px;
+            border: none;
             background-color: #1e88e5;
             color: white;
-            border: none;
-            border-radius: 6px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-right: 5px;
+            border-radius: 5px;
+        }
+
+        .btn-remove {
+            background-color: #d32f2f;
+            border-radius: 5px;
+            padding: 5px 10px;
+            color: white;
             text-decoration: none;
         }
 
-        .btn-buy:hover {
-            background-color: #1565c0;
+        .cart-total {
+            text-align: right;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
         }
 
-        .product-gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 18px;
+            margin-top: 30px;
         }
 
-        /* Responsividade para dispositivos móveis */
-        @media (max-width: 768px) {
-            .product-card {
-                width: 100%;
-                max-width: 300px;
-            }
+        .checkout-btn:hover {
+            background-color: #218838;
         }
     </style>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carriho de compra</title>
-    <h1>Carrinho de compra</h1>
-    <div class="page-container">
-        <div class="product-gallery">
-            <?php foreach ($lanches as $lanche): ?>
-                <div class="product-card">
-                    <div class="product-image">
-                        <?php 
-                        // Verifica se a imagem do produto existe
-                        $imagem_path = '/uploads/' . htmlspecialchars($lanche['imagem']);
-                        if (file_exists($_SERVER['DOCUMENT_ROOT'] . $imagem_path)): ?>
-                            <!-- Exibe a imagem do produto se ela existir -->
-                            <img src="<?php echo $imagem_path; ?>" alt="Imagem do Produto">
-                        <?php else: ?>
-                            <!-- Caso a imagem não exista, exibe uma imagem padrão -->
-                            <img src="/uploads/default.png" alt="Imagem padrão">
-                        <?php endif; ?>
-                    </div>
-                    <div class="product-info">
-                        <h3 class="product-name"><?php echo htmlspecialchars($lanche['nome']); ?></h3>
-                        <p class="product-price">R$ <?php echo number_format($lanche['preco'], 2, ',', '.'); ?></p>
-                        <a href="carrinho.php" class="btn-buy">Comprar</a>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
-    </div>
 </head>
 <body>
 
+    <div class="cart-container">
+        <div class="cart-header">Carrinho de Compras</div>
 
+        <?php if (empty($_SESSION['cart'])): ?>
+            <p>Seu carrinho está vazio.</p>
+        <?php else: ?>
+            <div class="cart-items">
+                <?php
+                foreach ($_SESSION['cart'] as $product_id => $quantity):
+                    // Busca os dados do produto
+                    $stmt = $pdo->prepare("SELECT nome, preco, imagem FROM lanches WHERE id = :id");
+                    $stmt->bindParam(':id', $product_id, PDO::PARAM_INT);
+                    $stmt->execute();
+                    $lanche = $stmt->fetch();
+                    if ($lanche):
+                ?>
+                    <div class="cart-item">
+                        <div class="cart-item-img">
+                            <img src="/uploads/<?php echo htmlspecialchars($lanche['imagem']); ?>" alt="<?php echo htmlspecialchars($lanche['nome']); ?>">
+                        </div>
+                        <div class="cart-item-name"><?php echo htmlspecialchars($lanche['nome']); ?></div>
+                        <div class="cart-item-quantity">
+                            <span>Quantidade: <?php echo $quantity; ?></span>
+                            <a href="carrinho.php?action=remove&id=<?php echo $product_id; ?>" class="btn-remove">Remover</a>
+                        </div>
+                        <div class="cart-item-price">R$ <?php echo number_format($lanche['preco'] * $quantity, 2, ',', '.'); ?></div>
+                    </div>
+                <?php
+                    endif;
+                endforeach;
+                ?>
+            </div>
 
+            <div class="cart-total">
+                Total: R$ <?php echo number_format(calcular_total(), 2, ',', '.'); ?>
+            </div>
 
+            <a href="finalizar-compra.php" class="checkout-btn">Finalizar Compra</a>
+        <?php endif; ?>
+    </div>
 
-
-
-<?php include('includes/footer.php'); ?>
 </body>
 </html>
 
-
-
-
-
-
-
-
-
-
+<?php include('includes/footer.php'); ?>

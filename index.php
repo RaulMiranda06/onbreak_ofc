@@ -9,6 +9,12 @@ include('includes/header.php');
 $query = "SELECT * FROM lanches";
 $stmt = $pdo->query($query); // Executa a query
 $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
+
+// Inicializa o carrinho caso não exista na sessão
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -44,12 +50,18 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
 
         .product-card img {
             height: auto;
-            width: 100px;  /* Definindo uma largura fixa */
-            border-radius: 6px;
+            max-width: 100px;  /* Definindo uma largura fixa */
+            border-radius: 5px;
             object-fit: cover;  /* Faz com que a imagem se ajuste sem distorção */
         }
 
@@ -58,13 +70,14 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
         }
 
         .product-name {
-            font-size: 18px;
+            font-size: 15px;
             color: #333;
             margin-bottom: 8px;
+            font-weight: bold;
         }
 
         .product-price {
-            font-size: 16px;
+            font-size: 15px;
             color: #f4511e;
             font-weight: bold;
         }
@@ -78,6 +91,8 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
             cursor: pointer;
             margin-top: 15px;
             text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
         }
 
         .btn-buy:hover {
@@ -88,6 +103,17 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+        }
+
+        .banner_principal {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .banner-item img {
+            height: 80px;
+            margin: 0 10px;
         }
 
         /* Responsividade para dispositivos móveis */
@@ -132,7 +158,8 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
                     <div class="product-info">
                         <h3 class="product-name"><?php echo htmlspecialchars($lanche['nome']); ?></h3>
                         <p class="product-price">R$ <?php echo number_format($lanche['preco'], 2, ',', '.'); ?></p>
-                        <a href="carrinho.php" class="btn-buy">Comprar</a>
+                        <!-- Link que adiciona o item ao carrinho -->
+                        <a href="carrinho.php?action=add&id=<?php echo $lanche['id']; ?>" class="btn-buy">Comprar</a>
                     </div>
                 </div>
             <?php endforeach; ?>
