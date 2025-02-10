@@ -3,6 +3,15 @@ session_start();
 
 // Inclui o cabeçalho da página
 include('header.php');
+
+// Verificar se o usuário está logado
+if (!isset($_SESSION['usuario_id'])) {
+    // Se não estiver logado, redireciona para a página de login
+    header("Location: login_admin.php");
+    exit;
+}
+
+
 ?>
 
 <!DOCTYPE html>

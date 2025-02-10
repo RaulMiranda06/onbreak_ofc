@@ -14,7 +14,6 @@ $lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -22,9 +21,92 @@ if (!isset($_SESSION['cart'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/estilo.css">
     <title>Venda de Lanches</title>
-    
+
+    <!-- CSS Interno -->
+    <style>
+        /* Resetando alguns estilos padrões */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Definindo a fonte padrão */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        /* Estilo para o container de produtos */
+        .page-container {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .product-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Menor largura para os cards */
+            gap: 15px;
+            max-width: 1000px; /* Diminuir a largura máxima da galeria */
+            width: 100%;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Diminuir o tamanho da sombra */
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .product-card:hover {
+            transform: scale(1.02); /* Menor escala no hover */
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 150px; /* Reduzir a altura da imagem */
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 10px; /* Menos padding */
+            text-align: center;
+        }
+
+        .product-name {
+            font-size: 1em; /* Menor tamanho da fonte */
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            font-size: 1em; /* Menor tamanho da fonte */
+            color: #e53935;
+            margin-bottom: 12px;
+        }
+
+        .btn-buy {
+            display: inline-block;
+            background-color: #e53935;
+            color: white;
+            padding: 8px 15px; /* Menos padding */
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-buy:hover {
+            background-color: #c62828;
+        }
+
+    </style>
 </head>
 <body>
     
