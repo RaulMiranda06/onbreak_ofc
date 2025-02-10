@@ -1,3 +1,4 @@
+
 <?php
 session_start(); // Inicia a sessão
 
@@ -5,10 +6,17 @@ session_start(); // Inicia a sessão
 include("includes/conexao.php");
 include('includes/header.php');
 
+// Verificar se o usuário está logado
+if (!isset($_SESSION['usuario_id'])) {
+    // Se não estiver logado, redireciona para a página de login
+    header("Location: login_usuario.php");
+    exit;
+}
+
 // Query para pegar os dados dos lanches
 $query = "SELECT * FROM lanches";
 $stmt = $pdo->query($query); // Executa a query
-$lanches = $stmt->fetchAll(); // Pega todos os produtos do banco de dados
+$lanches = $stmt->fetchAll(PDO::FETCH_ASSOC); // Usar PDO::FETCH_ASSOC para maior clareza
 
 // Inicializa o carrinho caso não exista na sessão
 if (!isset($_SESSION['cart'])) {
@@ -25,14 +33,14 @@ if (!isset($_SESSION['cart'])) {
 
     <!-- CSS Interno -->
     <style>
-        /* Resetando alguns estilos padrões */
+
+        /* Reset básico para garantir consistência entre navegadores */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Definindo a fonte padrão */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -50,42 +58,42 @@ if (!isset($_SESSION['cart'])) {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Menor largura para os cards */
             gap: 15px;
-            max-width: 1000px; /* Diminuir a largura máxima da galeria */
+            max-width: 1000px;
             width: 100%;
         }
 
         .product-card {
             background-color: white;
             border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Diminuir o tamanho da sombra */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: transform 0.3s ease-in-out;
         }
 
         .product-card:hover {
-            transform: scale(1.02); /* Menor escala no hover */
+            transform: scale(1.02);
         }
 
         .product-image img {
             width: 100%;
-            height: 150px; /* Reduzir a altura da imagem */
+            height: 150px;
             object-fit: cover;
         }
 
         .product-info {
-            padding: 10px; /* Menos padding */
+            padding: 10px;
             text-align: center;
         }
 
         .product-name {
-            font-size: 1em; /* Menor tamanho da fonte */
+            font-size: 1em;
             font-weight: bold;
             color: #333;
             margin-bottom: 8px;
         }
 
         .product-price {
-            font-size: 1em; /* Menor tamanho da fonte */
+            font-size: 1em;
             color: #e53935;
             margin-bottom: 12px;
         }
@@ -94,7 +102,7 @@ if (!isset($_SESSION['cart'])) {
             display: inline-block;
             background-color: #e53935;
             color: white;
-            padding: 8px 15px; /* Menos padding */
+            padding: 8px 15px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
@@ -104,6 +112,25 @@ if (!isset($_SESSION['cart'])) {
 
         .btn-buy:hover {
             background-color: #c62828;
+        }
+
+        /* Responsividade para telas menores */
+        @media (max-width: 768px) {
+            .product-gallery {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Ajusta a largura dos cards */
+            }
+
+            .product-name {
+                font-size: 0.9em;
+            }
+
+            .product-price {
+                font-size: 0.9em;
+            }
+
+            .btn-buy {
+                padding: 7px 12px; /* Ajusta o tamanho do botão */
+            }
         }
 
     </style>
@@ -120,6 +147,9 @@ if (!isset($_SESSION['cart'])) {
             </div>
         </div>
     </div>
+    
+    <br>
+    <br>
 
     <div class="page-container">
         <div class="product-gallery">
@@ -132,10 +162,10 @@ if (!isset($_SESSION['cart'])) {
                         $full_path = $_SERVER['DOCUMENT_ROOT'] . $imagem_path;
                         if (isset($lanche['imagem']) && !empty($lanche['imagem']) && file_exists($full_path)): ?>
                             <!-- Exibe a imagem do produto se ela existir -->
-                            <img src="<?php echo $imagem_path; ?>" alt="Imagem do Produto">
+                            <img src="<?php echo $imagem_path; ?>" alt="Imagem do produto: <?php echo htmlspecialchars($lanche['nome']); ?>">
                         <?php else: ?>
                             <!-- Caso a imagem não exista, exibe uma imagem padrão -->
-                            <img src="/uploads/default.png" alt="Imagem padrão">
+                            <img src="/uploads/default.png" alt="Imagem padrão de produto">
                         <?php endif; ?>
                     </div>
                     <div class="product-info">
@@ -148,8 +178,13 @@ if (!isset($_SESSION['cart'])) {
             <?php endforeach; ?>
         </div>
     </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
     <?php include('includes/footer.php'); ?>
 
 </body>
 </html>
+
+

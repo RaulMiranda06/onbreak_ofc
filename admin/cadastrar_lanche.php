@@ -9,18 +9,21 @@ function exibirMensagem($mensagem, $tipo = 'error') {
 // Verifique se o formulário foi enviado
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Verifique se os campos foram preenchidos
-    if (isset($_POST['nome'], $_POST['descricao'], $_POST['preco'], $_FILES['imagem']) && 
-        !empty($_POST['nome']) && !empty($_POST['descricao']) && !empty($_POST['preco']) && !empty($_FILES['imagem'])) {
+    if (isset($_POST['nome'], $_POST['descricao'], $_POST['preco'], $_POST['estoque'], $_FILES['imagem']) && 
+        !empty($_POST['nome']) && !empty($_POST['descricao']) && !empty($_POST['preco']) && !empty($_POST['estoque']) && !empty($_FILES['imagem'])) {
         
         // Sanitizar os inputs
         $nome = htmlspecialchars(trim($_POST['nome']));
         $descricao = htmlspecialchars(trim($_POST['descricao']));
         $preco = $_POST['preco'];
+        $estoque = $_POST['estoque']; // Obtém a quantidade de estoque
         $imagem = $_FILES['imagem'];
 
-        // Verificar se o preço é válido (número positivo)
+        // Verificar se o preço e estoque são válidos
         if (!is_numeric($preco) || $preco <= 0) {
             $mensagem = exibirMensagem('Por favor, insira um preço válido.', 'error');
+        } elseif (!is_numeric($estoque) || $estoque < 0) {
+            $mensagem = exibirMensagem('Por favor, insira uma quantidade de estoque válida.', 'error');
         } else {
             // Verifique se ocorreu erro no upload do arquivo
             if ($imagem['error']) {
@@ -45,10 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         // Tente mover o arquivo para a pasta
                         if (move_uploaded_file($imagem['tmp_name'], $path)) {
                             // Inserir dados no banco de dados
-                            $stmt = $pdo->prepare("INSERT INTO lanches (nome, descricao, preco, imagem) VALUES (:nome, :descricao, :preco, :imagem)");
+                            $stmt = $pdo->prepare("INSERT INTO lanches (nome, descricao, preco, estoque, imagem) VALUES (:nome, :descricao, :preco, :estoque, :imagem)");
                             $stmt->bindParam(':nome', $nome);
                             $stmt->bindParam(':descricao', $descricao);
                             $stmt->bindParam(':preco', $preco);
+                            $stmt->bindParam(':estoque', $estoque); // Adicionando o estoque
                             $stmt->bindParam(':imagem', $novoNomeImagem); // Caminho da imagem no banco
 
                             // Executar a query e verificar sucesso
@@ -227,6 +231,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="input-group">
                 <label for="preco">Preço</label>
                 <input type="text" name="preco" id="preco" required>
+            </div>
+
+            <div class="input-group">
+                <label for="estoque">Estoque</label>
+                <input type="number" name="estoque" id="estoque" min="0" required>
             </div>
 
             <div class="input-group">

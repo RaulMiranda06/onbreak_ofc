@@ -69,7 +69,7 @@ header .logo img {
 }
 
 .banner-item img {
-    max-height: 150px; /* Ajusta o tamanho máximo da altura das imagens */
+    max-height: 200px; /* Ajusta o tamanho máximo da altura das imagens */
     max-width: 100%; /* Faz com que a largura da imagem ocupe 100% do seu container */
     object-fit: contain; /* Mantém a proporção das imagens */
     display: inline-block; /* Assegura que as imagens sejam tratadas como elementos inline */

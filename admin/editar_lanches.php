@@ -6,48 +6,61 @@ function exibirMensagem($mensagem, $tipo = 'error') {
     return "<div class='alert-message-$tipo'>$mensagem</div>";
 }
 
-// Ação para editar o lanche
-if (isset($_GET['action']) && $_GET['action'] == 'editar' && isset($_GET['id'])) {
+// Verifique se o parâmetro 'id' está presente na URL
+if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    // Verificar se o formulário foi enviado
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $nome = htmlspecialchars(trim($_POST['nome']));
-        $descricao = htmlspecialchars(trim($_POST['descricao']));
-        $preco = $_POST['preco'];
-
-        // Verificar se o preço é válido
-        if (!is_numeric($preco) || $preco <= 0) {
-            $mensagem = "Preço inválido!";
-        } else {
-            // Atualizar os dados no banco de dados
-            $stmt = $pdo->prepare("UPDATE lanches SET nome = :nome, descricao = :descricao, preco = :preco WHERE id = :id");
-            $stmt->bindParam(':nome', $nome);
-            $stmt->bindParam(':descricao', $descricao);
-            $stmt->bindParam(':preco', $preco);
-            $stmt->bindParam(':id', $id);
-
-            if ($stmt->execute()) {
-                $mensagem = "Lanche atualizado com sucesso!";
-                header('Location: listar_lanches.php');
-                exit;
-            } else {
-                $mensagem = "Erro ao atualizar o lanche!";
-            }
-        }
-    }
-
-    // Buscar os dados do lanche a ser editado
+    // Buscar o lanche a ser editado
     $stmt = $pdo->prepare("SELECT * FROM lanches WHERE id = :id");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
-    $lanche = $stmt->fetch();
+    $lanche = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$lanche) {
-        header('Location: listar_lanches.php');
-        exit;
+        $mensagem = exibirMensagem('Lanche não encontrado.', 'error');
+    }
+} else {
+    $mensagem = exibirMensagem('ID do lanche não informado.', 'error');
+}
+
+// Atualizar o lanche
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $nome = $_POST['nome'];
+    $descricao = $_POST['descricao'];
+    $preco = $_POST['preco'];
+    $estoque = $_POST['estoque'];
+
+    // Verificar se uma nova imagem foi carregada
+    if ($_FILES['imagem']['name']) {
+        $imagem = $_FILES['imagem'];
+        $imagem_nome = time() . '-' . basename($imagem['name']);
+        $imagem_destino = '../uploads/' . $imagem_nome;
+
+        if (move_uploaded_file($imagem['tmp_name'], $imagem_destino)) {
+            // Atualiza a imagem
+            $stmt = $pdo->prepare("UPDATE lanches SET nome = :nome, descricao = :descricao, preco = :preco, estoque = :estoque, imagem = :imagem WHERE id = :id");
+            $stmt->bindParam(':imagem', $imagem_nome);
+        } else {
+            $mensagem = exibirMensagem('Erro ao fazer upload da imagem.', 'error');
+        }
+    } else {
+        // Não há nova imagem, então mantém a imagem antiga
+        $stmt = $pdo->prepare("UPDATE lanches SET nome = :nome, descricao = :descricao, preco = :preco, estoque = :estoque WHERE id = :id");
+    }
+
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':descricao', $descricao);
+    $stmt->bindParam(':preco', $preco);
+    $stmt->bindParam(':estoque', $estoque);
+    $stmt->bindParam(':id', $id);
+
+    if ($stmt->execute()) {
+        $mensagem = exibirMensagem('Lanche atualizado com sucesso!', 'success');
+    } else {
+        $mensagem = exibirMensagem('Falha ao atualizar o lanche. Tente novamente.', 'error');
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -57,106 +70,70 @@ if (isset($_GET['action']) && $_GET['action'] == 'editar' && isset($_GET['id']))
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Lanche</title>
     <style>
+        /* Layout geral */
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #fffae6;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
 
         .container {
+            width: 50%;
+            margin: 20px auto;
             background-color: #fff;
-            padding: 30px;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
         }
 
         h2 {
+            color: #ff6600;
             text-align: center;
-            color: #ff7043;
-            font-size: 36px;
-            margin-bottom: 20px;
         }
 
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .input-group input, .input-group textarea {
+        /* Estilos para o formulário */
+        input, textarea {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-            color: #333;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
         }
 
-        .input-group textarea {
-            resize: vertical;
-            height: 120px;
-        }
-
-        .button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #ff7043;
+        .btn-submit {
+            background-color: #ff6600;
             color: white;
+            padding: 12px 24px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
-            text-align: center;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 20px;
+            font-weight: bold;
         }
 
-        .button:hover {
-            background-color: #f4511e;
-            transform: scale(1.05);
+        .btn-submit:hover {
+            background-color: #e65c00;
         }
 
-        .alert-message-success,
-        .alert-message-error {
-            padding: 15px;
-            text-align: center;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
+        /* Estilo para os alertas */
         .alert-message-success {
+            padding: 15px;
             background-color: #4CAF50;
             color: white;
+            text-align: center;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 16px;
         }
 
         .alert-message-error {
+            padding: 15px;
             background-color: #f44336;
             color: white;
-        }
-
-        a.button {
-            width: auto;
-            margin-top: 10px;
             text-align: center;
-            display: inline-block;
-            background-color: #2196F3;
-        }
-
-        a.button:hover {
-            background-color: #1976D2;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -164,31 +141,34 @@ if (isset($_GET['action']) && $_GET['action'] == 'editar' && isset($_GET['id']))
     <div class="container">
         <h2>Editar Lanche</h2>
 
-        <!-- Exibir alertas de sucesso ou erro -->
+        <!-- Exibir mensagens de erro ou sucesso -->
         <?php if (isset($mensagem)): ?>
-            <?php echo exibirMensagem($mensagem, 'success'); ?>
+            <?php echo $mensagem; ?>
         <?php endif; ?>
 
-        <form method="POST">
-            <div class="input-group">
-                <label for="nome">Nome do Lanche</label>
-                <input type="text" name="nome" id="nome" value="<?php echo htmlspecialchars($lanche['nome']); ?>" required>
-            </div>
+        <!-- Formulário de Edição -->
+        <form method="POST" enctype="multipart/form-data">
+            <label for="nome">Nome</label>
+            <input type="text" name="nome" id="nome" value="<?php echo htmlspecialchars($lanche['nome']); ?>" required>
 
-            <div class="input-group">
-                <label for="descricao">Descrição</label>
-                <textarea name="descricao" id="descricao" required><?php echo htmlspecialchars($lanche['descricao']); ?></textarea>
-            </div>
+            <label for="descricao">Descrição</label>
+            <textarea name="descricao" id="descricao" rows="4" required><?php echo htmlspecialchars($lanche['descricao']); ?></textarea>
 
-            <div class="input-group">
-                <label for="preco">Preço</label>
-                <input type="text" name="preco" id="preco" value="<?php echo htmlspecialchars($lanche['preco']); ?>" required>
-            </div>
+            <label for="preco">Preço</label>
+            <input type="number" name="preco" id="preco" value="<?php echo htmlspecialchars($lanche['preco']); ?>" step="0.01" required>
 
-            <button class="button" type="submit">Atualizar Lanche</button>
+            <label for="estoque">Estoque</label>
+            <input type="number" name="estoque" id="estoque" value="<?php echo htmlspecialchars($lanche['estoque']); ?>" required>
+
+            <label for="imagem">Imagem (Deixe em branco para manter a imagem atual)</label>
+            <input type="file" name="imagem" id="imagem">
+
+            <button type="submit" class="btn-submit">Salvar Alterações</button>
         </form>
-
-        <a href="listar_lanches.php" class="button">Voltar para a Lista</a>
+        
+        <br>
+        <!-- Botão de Voltar -->
+        <a href="listar_lanches.php" class="btn-back">Voltar para a lista de lanches</a>
     </div>
 </body>
 </html>
