@@ -60,7 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mensagem = exibirMensagem('Falha ao atualizar o lanche. Tente novamente.', 'error');
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -70,52 +69,75 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Lanche</title>
     <style>
-        /* Layout geral */
         body {
             font-family: Arial, sans-serif;
-            background-color: #fffae6;
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
         }
 
         .container {
-            width: 50%;
-            margin: 20px auto;
+            width: 100%;
+            max-width: 450px;
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
         }
 
         h2 {
-            color: #ff6600;
             text-align: center;
+            color: #f4511e;
+            margin-bottom: 20px;
+            font-size: 26px;
         }
 
-        /* Estilos para o formulário */
-        input, textarea {
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            color: #555;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .input-group input,
+        .input-group textarea {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
+            padding: 12px;
+            font-size: 16px;
+            border: 2px solid #ddd;
             border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .input-group textarea {
+            resize: vertical;
         }
 
         .btn-submit {
-            background-color: #ff6600;
+            width: 390px;
+            padding: 15px;
+            background-color: #f4511e;
             color: white;
-            padding: 12px 24px;
+            font-size: 18px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         .btn-submit:hover {
-            background-color: #e65c00;
+            background-color: #e64a19;
+            transform: scale(1.05);
         }
 
-        /* Estilo para os alertas */
         .alert-message-success {
             padding: 15px;
             background-color: #4CAF50;
@@ -135,6 +157,67 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             margin-bottom: 20px;
             font-size: 16px;
         }
+
+        .btn-back {
+            display: inline-block;
+            width: 360px;
+            padding: 15px;
+            text-align: center;
+            background-color: #1E88E5;
+            color: white;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #1565C0;
+            transform: scale(1.05);
+        }
+
+        /* Responsivo para telas menores */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            h2 {
+                font-size: 22px;
+            }
+
+            .input-group input,
+            .input-group textarea {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .btn-submit,
+            .btn-back {
+                padding: 12px;
+                font-size: 16px;
+            }
+        }
+
+        /* Responsivo para dispositivos móveis (menor que 480px) */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .btn-submit,
+            .btn-back {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -148,24 +231,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <!-- Formulário de Edição -->
         <form method="POST" enctype="multipart/form-data">
-            <label for="nome">Nome</label>
-            <input type="text" name="nome" id="nome" value="<?php echo htmlspecialchars($lanche['nome']); ?>" required>
+            <div class="input-group">
+                <label for="nome">Nome</label>
+                <input type="text" name="nome" id="nome" value="<?php echo htmlspecialchars($lanche['nome']); ?>" required>
+            </div>
 
-            <label for="descricao">Descrição</label>
-            <textarea name="descricao" id="descricao" rows="4" required><?php echo htmlspecialchars($lanche['descricao']); ?></textarea>
+            <div class="input-group">
+                <label for="descricao">Descrição</label>
+                <textarea name="descricao" id="descricao" rows="4" required><?php echo htmlspecialchars($lanche['descricao']); ?></textarea>
+            </div>
 
-            <label for="preco">Preço</label>
-            <input type="number" name="preco" id="preco" value="<?php echo htmlspecialchars($lanche['preco']); ?>" step="0.01" required>
+            <div class="input-group">
+                <label for="preco">Preço</label>
+                <input type="number" name="preco" id="preco" value="<?php echo htmlspecialchars($lanche['preco']); ?>" step="0.01" required>
+            </div>
 
-            <label for="estoque">Estoque</label>
-            <input type="number" name="estoque" id="estoque" value="<?php echo htmlspecialchars($lanche['estoque']); ?>" required>
+            <div class="input-group">
+                <label for="estoque">Estoque</label>
+                <input type="number" name="estoque" id="estoque" value="<?php echo htmlspecialchars($lanche['estoque']); ?>" required>
+            </div>
 
-            <label for="imagem">Imagem (Deixe em branco para manter a imagem atual)</label>
-            <input type="file" name="imagem" id="imagem">
+            <div class="input-group">
+                <label for="imagem">Imagem (Deixe em branco para manter a imagem atual)</label>
+                <input type="file" name="imagem" id="imagem">
+            </div>
 
             <button type="submit" class="btn-submit">Salvar Alterações</button>
         </form>
-        
+
         <br>
         <!-- Botão de Voltar -->
         <a href="listar_lanches.php" class="btn-back">Voltar para a lista de lanches</a>

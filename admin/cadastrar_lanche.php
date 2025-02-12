@@ -81,129 +81,161 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Lanche</title>
     <style>
-        /* Estilo do corpo da página */
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f7f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+    }
 
-        /* Container principal do formulário */
+    .container {
+        width: 100%;
+        max-width: 600px;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        box-sizing: border-box;
+        margin: 0 20px; /* Adiciona um pequeno espaçamento lateral para não colidir com a borda */
+    }
+
+    h2 {
+        text-align: center;
+        color: #f4511e;
+        margin-bottom: 20px;
+        font-size: 26px;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    .input-group label {
+        font-size: 14px;
+        color: #555;
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    .input-group input,
+    .input-group textarea {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .input-group textarea {
+        resize: vertical;
+    }
+
+    .button {
+        width: 530px;
+        padding: 15px;
+        background-color: #f4511e;
+        color: white;
+        font-size: 18px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .button:hover {
+        background-color: #e64a19;
+        transform: scale(1.05);
+    }
+
+    .back-button {
+        display: inline-block;
+        width: 500px;
+        padding: 15px;
+        text-align: center;
+        background-color: #1E88E5;
+        color: white;
+        font-size: 18px;
+        text-decoration: none;
+        border-radius: 6px;
+        margin-top: 20px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .back-button:hover {
+        background-color: #1565C0;
+        transform: scale(1.05);
+    }
+
+    .alert-message-success {
+        padding: 15px;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+    .alert-message-error {
+        padding: 15px;
+        background-color: #f44336;
+        color: white;
+        text-align: center;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+
+    /* Responsivo para telas de tablets e dispositivos menores */
+    @media (max-width: 768px) {
         .container {
-            width: 100%;
-            max-width: 420px;  /* Aumenta um pouco a largura */
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);  /* Sombra mais suave */
-            box-sizing: border-box;
+            padding: 20px;
+            max-width: 100%;
+            margin: 0 10px; /* Ajusta as margens laterais para telas menores */
         }
 
-        /* Título do formulário */
-        h2 {
-            text-align: center;
-            color: #f4511e;
-            margin-bottom: 20px;
-            font-size: 26px;  /* Tamanho maior para destaque */
-        }
-
-        /* Estilo para o grupo de entradas */
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        /* Label do formulário */
-        .input-group label {
-            font-size: 14px;
-            color: #555;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        /* Inputs e textareas do formulário */
-        .input-group input, 
-        .input-group textarea {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
-        /* Estilo específico para textarea */
-        .input-group textarea {
-            resize: vertical;
-        }
-
-        /* Botão de ação principal */
-        .button {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            background-color: #f4511e;
-            color: white;
-            font-size: 18px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-sizing: border-box;
-        }
-
-        /* Efeito de hover no botão */
-        .button:hover {
-            background-color: #e64a19;
-            transform: scale(1.05);
-        }
-
-        /* Estilo para mensagens de sucesso */
-        .alert-message-success {
-            padding: 15px;
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        /* Estilo para mensagens de erro */
-        .alert-message-error {
-            padding: 15px;
-            background-color: #f44336;
-            color: white;
-            text-align: center;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-
-        /* Botão de voltar para o dashboard */
+        .button,
         .back-button {
-            display: inline-block;
-            width: 100%;
-            padding: 15px;
-            text-align: center;
-            background-color: #1E88E5;
-            color: white;
-            font-size: 18px;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            margin-top: 20px;
-            box-sizing: border-box;
+            font-size: 16px;
+            padding: 12px;
         }
 
-        /* Efeito de hover no botão de voltar */
-        .back-button:hover {
-            background-color: #1565C0;
-            transform: scale(1.05);
+        .input-group input,
+        .input-group textarea {
+            font-size: 14px;
+        }
+
+        h2 {
+            font-size: 22px; /* Reduz o tamanho do título em telas menores */
+        }
+    }
+
+    /* Responsivo para dispositivos móveis (menor que 480px) */
+    @media (max-width: 480px) {
+        .container {
+            padding: 15px;
+            margin: 0 5px; /* Pequena margem para smartphones */
+        }
+
+        .button,
+        .back-button {
+            font-size: 14px;
+            padding: 10px;
+        }
+
+        .input-group input,
+        .input-group textarea {
+            font-size: 12px;
+        }
+
+        h2 {
+            font-size: 20px; /* Ajusta o título para telas muito pequenas */
+        }
         }
 
     </style>

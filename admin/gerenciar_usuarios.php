@@ -32,57 +32,141 @@ $usuarios = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Usuários</title>
     <style>
-        /* Estilos para a tabela de usuários */
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
         }
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
+
+        h2 {
             text-align: center;
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
         }
+
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
         th {
             background-color: #f4511e;
             color: white;
         }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
         .button {
             padding: 8px 15px;
-            border: none;
-            background-color: #f4511e;
+            background-color: #1E88E5;
             color: white;
-            border-radius: 5px;
-            cursor: pointer;
+            border-radius: 6px;
             text-decoration: none;
+            font-size: 16px;
+            margin: 5px;
+            display: inline-block;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
+
         .button:hover {
-            background-color: #e64a19;
+            background-color: #1565C0;
+            transform: scale(1.05);
         }
+
+        .back-button {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #1E88E5;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 18px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .back-button:hover {
+            background-color: #1565C0;
+            transform: scale(1.05);
+        }
+
         .alert {
-            padding: 10px;
-            margin-bottom: 20px;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-size: 16px;
             text-align: center;
-            border-radius: 5px;
         }
+
         .alert-success {
             background-color: #4CAF50;
             color: white;
         }
+
         .alert-error {
             background-color: #f44336;
             color: white;
         }
-        .back-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #2196F3;
-            color: white;
-            border-radius: 5px;
-            text-decoration: none;
+
+        /* Responsivo para telas menores */
+        @media (max-width: 768px) {
+            table {
+                width: 100%;
+                margin: 10px;
+            }
+
+            .button, .back-button {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            th, td {
+                font-size: 14px;
+            }
         }
-        .back-button:hover {
-            background-color: #0b7dda;
+
+        /* Responsivo para dispositivos móveis (menor que 480px) */
+        @media (max-width: 480px) {
+            .button, .back-button {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            table {
+                margin: 10px;
+            }
+
+            th, td {
+                font-size: 12px;
+            }
         }
     </style>
 </head>

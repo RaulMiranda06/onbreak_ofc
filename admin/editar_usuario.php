@@ -128,6 +128,47 @@ if (isset($_GET['id'])) {
             background-color: #f44336;
             color: white;
         }
+
+        /* Responsividade para telas pequenas */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 90%;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .button {
+                font-size: 18px;
+                padding: 12px;
+            }
+
+            .input-group input {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .button {
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .input-group input {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>

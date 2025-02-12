@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 31/01/2025 às 01:44
+-- Tempo de geração: 12/02/2025 às 21:18
 -- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.0.30
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,8 +40,7 @@ CREATE TABLE `clientes` (
 --
 
 INSERT INTO `clientes` (`id`, `email`, `senha`, `created_at`, `criado_em`) VALUES
-(9, 'raul@gmail.com', '$2y$10$c.e4.uEEhSbRS/QlKnG41e6jmMfJ8ntb.BzMaGv5y02q6d53UdcrC', '2025-01-30 22:28:34', '2025-01-30 22:28:34'),
-(10, 'fabio@gmail.com', '$2y$10$r7CEKyT.wb4ZDjNYFz7iu.GEQuwDfUvPRm.PCw1CUb/7D23MvK/1u', '2025-01-30 22:28:46', '2025-01-30 22:28:46');
+(11, 'raul@gmail.com', '$2y$10$NJ2jXnhW5gca/LhGiDveLeVzjQ/HhypWyo6k3GQMxxlZjzB0Fzws6', '2025-02-11 18:00:56', '2025-02-11 18:00:56');
 
 -- --------------------------------------------------------
 
@@ -54,18 +53,20 @@ CREATE TABLE `lanches` (
   `nome` varchar(255) NOT NULL,
   `descricao` text NOT NULL,
   `preco` decimal(10,2) NOT NULL,
-  `imagem` varchar(255) NOT NULL
+  `estoque` int(11) NOT NULL DEFAULT 0,
+  `imagem` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `lanches`
 --
 
-INSERT INTO `lanches` (`id`, `nome`, `descricao`, `preco`, `imagem`) VALUES
-(6, 'suco', 'suco de laraja', 2.00, '679c08aeb8dc0.jpg'),
-(7, 'enrolado', 'enrolado de salsicha', 5.00, '679c08c7083b6.jpg'),
-(8, 'pastel', 'pastel frito', 4.00, '679c08dd62e53.jpg'),
-(9, 'refrigerante', 'refrigerante', 4.00, '679c094c13eb6.jpg');
+INSERT INTO `lanches` (`id`, `nome`, `descricao`, `preco`, `estoque`, `imagem`, `created_at`) VALUES
+(2, 'coxinha de frango', 'salgado', 5.00, 100, '67acb89b200b7.png', '2025-02-12 15:04:59'),
+(3, 'enrolado de salsicha', 'salgado', 5.00, 240, '67acca2984741.jpg', '2025-02-12 16:19:53'),
+(4, 'coca cola', 'refrigerante', 5.00, 234, '67accc65f37bf.jpg', '2025-02-12 16:29:25'),
+(5, 'suco de laranja', 'suco', 5.00, 435, '67accc7f8472e.jpg', '2025-02-12 16:29:51');
 
 -- --------------------------------------------------------
 
@@ -86,8 +87,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `email`, `senha`, `created_at`, `criado_em`) VALUES
-(5, 'raul@gmail.com', '$2y$10$q8ZJTIWl/C/kUZPOsdkHcuSrOlF/zkcho9HFWUnNQVs6f9Zlz8WiS', '2025-01-30 22:12:52', '2025-01-30 22:12:52'),
-(6, 'fabio@gmail.com', '$2y$10$EpISAJoZQOwYOgK6qtjKiey7GXnBgxvtI49n133veEoyV4Jxb.9rG', '2025-01-30 22:13:27', '2025-01-30 22:13:27');
+(8, 'raul@gmail.com', '$2y$10$KWNYSnK0M5GNp6/v0jHECOfsTsB6P9iGefNqDqzZ6nm3l21hRPpqe', '2025-02-11 18:01:15', '2025-02-11 18:01:15');
 
 --
 -- Índices para tabelas despejadas
@@ -119,19 +119,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `lanches`
 --
 ALTER TABLE `lanches`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

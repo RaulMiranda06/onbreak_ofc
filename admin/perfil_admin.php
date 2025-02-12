@@ -144,6 +144,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .button-back:hover {
             background-color: #1976D2;
         }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                max-width: 80%;
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .button {
+                font-size: 18px;
+                padding: 12px;
+            }
+
+            .input-group input {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                max-width: 95%;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            .button {
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .input-group input {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -197,8 +238,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p><a href="logout.php">Sair</a></p>
         </div>
 
-        <!-- Botão para voltar ao início -->
-        
     </div>
 
 </body>

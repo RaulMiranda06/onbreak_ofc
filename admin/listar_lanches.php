@@ -34,51 +34,79 @@ $lanches = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listar Lanches</title>
     <style>
-        /* Layout geral */
         body {
             font-family: Arial, sans-serif;
-            background-color: #fffae6; /* Cor de fundo suave */
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            padding: 0;
         }
 
         .container {
-            width: 80%;
-            margin: 20px auto;
+            width: 100%;
+            max-width: 1000px;
             background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            overflow: auto;
         }
 
         h2 {
-            color: #ff6600; /* Cor laranja */
             text-align: center;
+            color: #f4511e;
+            margin-bottom: 20px;
+            font-size: 26px;
         }
 
-        /* Estilos para a tabela */
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         th, td {
             padding: 12px;
-            border: 1px solid #ddd;
             text-align: left;
+            border-bottom: 1px solid #ddd;
         }
 
         th {
-            background-color: #ff6600;
+            background-color: #f4511e;
             color: white;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        td img {
+            max-width: 80px;
+            height: auto;
         }
 
-        /* Estilo para os alertas */
+        a {
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .btn-back {
+            display: inline-block;
+            width: 300px;
+            padding: 15px;
+            text-align: center;
+            background-color: #1E88E5;
+            color: white;
+            font-size: 18px;
+            border-radius: 6px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-back:hover {
+            background-color: #1565C0;
+            transform: scale(1.05);
+        }
+
         .alert-message-success {
             padding: 15px;
             background-color: #4CAF50;
@@ -99,28 +127,47 @@ $lanches = $stmt->fetchAll(PDO::FETCH_ASSOC);
             font-size: 16px;
         }
 
-        /* Estilos do botão "Voltar" */
-        .btn-back {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #1E88E5;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
+        /* Responsivo para telas menores */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+
+            .btn-back {
+                padding: 12px;
+                font-size: 16px;
+            }
         }
 
-        .btn-back:hover {
-            background-color:rgb(0, 60, 255);
+        /* Responsivo para dispositivos móveis (menor que 480px) */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 8px;
+            }
+
+            .btn-back {
+                padding: 10px;
+                font-size: 14px;
+            }
         }
 
-        /* Estilo das imagens */
-        img {
-            max-width: 50px;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
@@ -152,8 +199,8 @@ $lanches = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo $lanche['estoque']; ?></td>
                         <td><img src="../uploads/<?php echo htmlspecialchars($lanche['imagem']); ?>" alt="Imagem do Lanche"></td>
                         <td>
-                            <a href="editar_lanche.php?id=<?php echo $lanche['id']; ?>">Editar</a> |
-                            <a href="?excluir=<?php echo $lanche['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este lanche?')">Excluir</a>
+                            <a href="editar_lanche.php?id=<?php echo $lanche['id']; ?>" style="color: #2d87f0;">Editar</a> |
+                            <a href="?excluir=<?php echo $lanche['id']; ?>" style="color: #f44336;" onclick="return confirm('Tem certeza que deseja excluir este lanche?')">Excluir</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
