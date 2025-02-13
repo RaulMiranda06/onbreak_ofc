@@ -8,97 +8,98 @@
     <title>Painel Administrativo</title>
     <style>
         /* Reset e estilos globais */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
 
-        body {
-            background-color: #f7f7f7; /* Cor neutra de fundo */
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
+    body {
+        background-color: #f0f4f8; /* Tom suave de azul claro para o fundo */
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+    }
 
-        /* Container principal */
+    /* Container principal */
+    .admin-container {
+        background: #ffffff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 600px;
+        width: 90%;
+        margin: 20px auto;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .admin-container:hover {
+        transform: translateY(-5px);
+    }
+
+    .admin-container h1 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #2c3e50; /* Azul escuro para o título */
+    }
+
+    .admin-container p {
+        font-size: 1.1rem;
+        margin-bottom: 25px;
+        color: #7f8c8d; /* Cor cinza suave para o texto */
+    }
+
+    /* Links de navegação */
+    .admin-links {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .admin-links a {
+        text-decoration: none;
+        background: #3498db; /* Cor azul vibrante para os links */
+        color: white;
+        padding: 14px;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+        display: block;
+        text-align: center;
+    }
+
+    .admin-links a:hover {
+        background: #2980b9; /* Azul mais escuro para hover */
+        transform: scale(1.05);
+    }
+
+    .admin-links a:active {
+        background: #1f618d; /* Azul ainda mais escuro no clique */
+    }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
         .admin-container {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 600px;
-            width: 90%;
-            margin: 20px auto;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .admin-container:hover {
-            transform: translateY(-5px);
+            width: 95%;
+            padding: 25px;
         }
 
         .admin-container h1 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #4b4b4b; /* Cor de texto neutra */
-        }
-
-        .admin-container p {
-            font-size: 1.1rem;
-            margin-bottom: 25px;
-            color: #666; /* Cor suave para o texto */
-        }
-
-        /* Links de navegação */
-        .admin-links {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            font-size: 1.6rem;
         }
 
         .admin-links a {
-            text-decoration: none;
-            background: #6c757d; /* Tom neutro de cinza para os links */
-            color: white;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
-            display: block;
-            text-align: center;
+            font-size: 1rem;
+            padding: 12px;
         }
+    }
 
-        .admin-links a:hover {
-            background: #5a6268; /* Tom mais escuro para hover */
-            transform: scale(1.05);
-        }
-
-        .admin-links a:active {
-            background: #4e555b; /* Cor escura no clique */
-        }
-
-        /* Responsividade */
-        @media (max-width: 600px) {
-            .admin-container {
-                width: 95%;
-                padding: 25px;
-            }
-
-            .admin-container h1 {
-                font-size: 1.6rem;
-            }
-
-            .admin-links a {
-                font-size: 1rem;
-                padding: 12px;
-            }
-        }
     </style>
 </head>
 <body>
