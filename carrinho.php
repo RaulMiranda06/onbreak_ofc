@@ -67,22 +67,113 @@ if (isset($_GET['action']) && $_GET['action'] == "remove" && isset($_GET['id']))
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 80%; margin: auto; padding: 20px; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .container { width: 90%; max-width: 1200px; margin: auto; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        
+        h1 { text-align: center; color: #333; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; text-align: center; border-bottom: 1px solid #ddd; }
-        img { width: 50px; height: 50px; object-fit: cover; }
-        .btn { padding: 8px 12px; text-decoration: none; color: white; border-radius: 4px; display: inline-block; text-align: center; }
-        .btn-remove { background: red; }
-        .btn-finalizar { background: green; }
-        .btn-back { background: blue; }
-        .total-price { font-size: 20px; margin-top: 10px; font-weight: bold; }
-        .quantity-input { width: 50px; text-align: center; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #008CBA; color: white; }
+        td { background-color: #fafafa; }
+        .imagem { width: 60px; height: 60px; object-fit: cover; border-radius: 5px; }
+
+        .quantity-input {
+            width: 60px;
+            padding: 5px;
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            color: white;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .btn-remove { background-color: #f44336; }
+        .btn-remove:hover { background-color: #e53935; }
+
+        .total-price { font-size: 20px; margin-top: 20px; font-weight: bold; text-align: right; }
+
+        /* Estilos para os botões */
+        .botaoatualizar {
+            background-color: #4CAF50; /* Novo cor de fundo (verde) */
+            color: white;
+            padding: 12px 24px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .botaoatualizar:hover {
+            background-color: #45a049; /* Cor do fundo ao passar o mouse */
+        }
+
+        .button {
+            background-color: #008CBA;
+            color: white;
+            padding: 12px 24px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #007bb5;
+        }
+
+        .botaovoltar {
+            background-color: #f44336;
+            color: white;
+            padding: 12px 24px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .botaovoltar:hover {
+            background-color: #e53935;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            table, .total-price, .btn {
+                font-size: 12px;
+            }
+
+            .quantity-input {
+                width: 45px;
+            }
+        }
+
+        .finalizar-container {
+            display: flex;
+            justify-content: space-between; /* Distribui os botões à esquerda e direita */
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Seu Carrinho</h1>
+
         <?php if (!empty($_SESSION['cart'])): ?>
             <form method="post">
                 <table>
@@ -105,7 +196,7 @@ if (isset($_GET['action']) && $_GET['action'] == "remove" && isset($_GET['id']))
                             $total += $subtotal;
                         ?>
                         <tr>
-                            <td><img src="uploads/<?php echo htmlspecialchars($item["imagem"]); ?>" alt="<?php echo htmlspecialchars($item["nome"]); ?>"></td>
+                            <td><img class="imagem" src="uploads/<?php echo htmlspecialchars($item["imagem"]); ?>" alt="<?php echo htmlspecialchars($item["nome"]); ?>"></td>
                             <td><?php echo htmlspecialchars($item["nome"]); ?></td>
                             <td>R$ <?php echo number_format($item["preco"], 2, ',', '.'); ?></td>
                             <td>
@@ -122,20 +213,24 @@ if (isset($_GET['action']) && $_GET['action'] == "remove" && isset($_GET['id']))
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+
                 <div class="total-price">
                     Total: R$ <?php echo number_format($total, 2, ',', '.'); ?>
                 </div>
-                <br><br>
-                <button type="submit" name="update_cart" class="btn btn-finalizar">Atualizar Carrinho</button>
+
+                <div class="finalizar-container">
+                    <button type="submit" name="update_cart" class="botaoatualizar">Atualizar Carrinho</button>
+                    <a href="finalizar.php" class="button">Finalizar Compra</a>
+                </div>
             </form>
-            <br>
-            <a href="finalizar.php" class="btn btn-finalizar">Finalizar Compra</a>
         <?php else: ?>
             <p>Seu carrinho está vazio.</p>
         <?php endif; ?>
+
         <br><br>
-        <a href="index.php" class="btn btn-back">Continuar Comprando</a>
+        <a href="index.php" class="botaovoltar">Continuar Comprando</a>
     </div>
+
     <?php include("includes/footer.php"); ?>
 </body>
 </html>

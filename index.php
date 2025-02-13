@@ -25,118 +25,176 @@ $lanches = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="css/estilo.css">
     <style>
     /* Estilização do banner */
+/* Resetando alguns estilos padrão */
+/* Resetando alguns estilos padrão */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fundo branco */
+body {
+    background: #ffffff;
+    font-family: Arial, sans-serif;
+}
+
+/* Estilização do banner */
 .banner {
     width: 100%;
-    height: 600px; /* Aumentado para telas grandes */
+    height: 600px; /* Reduzido um pouco */
     object-fit: cover;
+    transition: transform 0.8s ease-in-out;
 }
 
-/* Ajuste do tamanho do banner em telas menores */
-@media (max-width: 1024px) {
-    .banner {
-        height: 400px; /* Ajuste para tablets */
-    }
-}
-
-@media (max-width: 768px) {
-    .banner {
-        height: 300px; /* Ajuste para celulares médios */
-    }
-}
-
-@media (max-width: 480px) {
-    .banner {
-        height: 200px; /* Ajuste para celulares pequenos */
-    }
+.banner:hover {
+    transform: scale(1.05);
 }
 
 /* Grid responsivo para os produtos */
 .product-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Ajustado para melhor distribuição */
-    gap: 25px;
-    padding: 20px;
-    max-width: 1200px; /* Aumentado para telas grandes */
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Reduzindo um pouco */
+    gap: 20px;
+    padding: 15px;
+    max-width: 1100px;
     margin: auto;
 }
 
 /* Estilo do cartão de produto */
 .product-card {
     border: 1px solid #ddd;
-    border-radius: 12px; /* Maior borda para um design mais suave */
+    border-radius: 10px;
     text-align: center;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease-in-out;
+    padding: 15px;
+    background: #ffffff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+    min-height: 300px; /* Reduzido um pouco */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-/* Efeito ao passar o mouse */
 .product-card:hover {
-    transform: scale(1.08);
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Imagens dos produtos responsivas */
+.product-image {
+    width: 100%;
+    height: 180px; /* Reduzido um pouco */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
 .product-image img {
     width: 100%;
-    max-height: 180px; /* Aumentado para melhor visualização */
-    object-fit: cover;
+    height: 100%;
+    object-fit: contain;
     border-radius: 10px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.product-image img:hover {
+    transform: scale(1.05);
 }
 
 /* Nome do produto */
 .product-name {
-    font-size: 1.3em; /* Aumentado para melhor destaque */
-    margin-top: 12px;
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: #333;
+    font-weight: bold;
 }
 
-/* Preço destacado */
+/* Preço */
 .product-price {
     color: #e44d26;
     font-weight: bold;
     font-size: 1.1em;
+    margin: 10px 0;
 }
 
 /* Botão de compra */
 .btn-buy {
     display: inline-block;
-    margin-top: 12px;
-    padding: 12px 18px;
+    padding: 10px 16px;
     background-color: #e44d26;
     color: white;
     font-size: 1em;
-    text-decoration: none;
-    border-radius: 6px;
-    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s ease-in-out;
 }
 
-/* Efeito no botão */
 .btn-buy:hover {
     background-color: #c5371b;
-    transform: scale(1.07);
+    transform: scale(1.05);
 }
 
-/* Ajustes responsivos para telas pequenas */
-@media (max-width: 600px) {
-    .product-gallery {
-        grid-template-columns: 1fr;
-        padding: 15px;
-    }
+/* Grid para pedidos */
+.order-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 pedidos por linha */
+    gap: 20px;
+    padding: 15px;
+    max-width: 1100px;
+    margin: auto;
+}
 
-    .btn-buy {
-        width: 100%;
-        font-size: 1.1em;
-    }
+/* Ajustes para os pedidos */
+.order-card {
+    background: linear-gradient(to bottom, #ffcc99, #ff7f50);
+    color: #333;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 280px; /* Reduzido um pouco */
+}
 
-    .product-image img {
-        max-height: 160px;
+.order-card:hover {
+    background: linear-gradient(to bottom, #ffa07a, #ff6347);
+}
+
+/* Botão de pedido */
+.btn-order {
+    display: inline-block;
+    padding: 10px 16px;
+    background-color: #ff7f50;
+    color: white;
+    font-size: 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s, transform 0.2s ease-in-out;
+}
+
+.btn-order:hover {
+    background-color: #ff6347;
+    transform: scale(1.05);
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .order-gallery {
+        grid-template-columns: repeat(2, 1fr); /* 2 pedidos por linha */
     }
 }
 
-    </style>
+@media (max-width: 480px) {
+    .order-gallery {
+        grid-template-columns: 1fr; /* 1 pedido por linha */
+    }
+}
+</style>
 </head>
 <body>
-
+    
     <img class="banner" src="img/banner.webp" alt="Banner de Lanches">
     <br><br>
     <div class="page-container">
