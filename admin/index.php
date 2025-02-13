@@ -16,7 +16,7 @@
         }
 
         body {
-            background-color: #f4f4f4;
+            background-color: #f7f7f7; /* Cor neutra de fundo */
             color: #333;
             display: flex;
             flex-direction: column;
@@ -27,26 +27,31 @@
 
         /* Container principal */
         .admin-container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
-            max-width: 500px;
+            max-width: 600px;
             width: 90%;
             margin: 20px auto;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .admin-container:hover {
+            transform: translateY(-5px);
         }
 
         .admin-container h1 {
             font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: #ff6600;
+            margin-bottom: 20px;
+            color: #4b4b4b; /* Cor de texto neutra */
         }
 
         .admin-container p {
-            font-size: 1rem;
-            margin-bottom: 20px;
-            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #666; /* Cor suave para o texto */
         }
 
         /* Links de navegação */
@@ -58,35 +63,40 @@
 
         .admin-links a {
             text-decoration: none;
-            background: #ff6600;
+            background: #6c757d; /* Tom neutro de cinza para os links */
             color: white;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 1rem;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1.1rem;
             font-weight: bold;
             transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
             display: block;
+            text-align: center;
         }
 
         .admin-links a:hover {
-            background: #e44d26;
+            background: #5a6268; /* Tom mais escuro para hover */
             transform: scale(1.05);
+        }
+
+        .admin-links a:active {
+            background: #4e555b; /* Cor escura no clique */
         }
 
         /* Responsividade */
         @media (max-width: 600px) {
             .admin-container {
                 width: 95%;
-                padding: 20px;
+                padding: 25px;
             }
 
             .admin-container h1 {
-                font-size: 1.5rem;
+                font-size: 1.6rem;
             }
 
             .admin-links a {
-                font-size: 0.9rem;
-                padding: 10px;
+                font-size: 1rem;
+                padding: 12px;
             }
         }
     </style>
@@ -100,6 +110,7 @@
             <a href="listar_lanches.php">Ver Lanches</a>
             <a href="cadastrar_lanche.php">Cadastrar Lanche</a>
             <a href="gerenciar_usuarios.php">Gerenciar Usuários</a>
+            <a href="admin_pedidos.php">Gerenciar Pedidos</a>
         </nav>
     </div>
 </body>

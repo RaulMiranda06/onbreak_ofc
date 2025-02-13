@@ -1,8 +1,8 @@
 <?php
 session_start();
-include("includes/conexao.php");
-
-// Verifica se há pedidos para o usuário
+include("../includes/conexao.php");
+include("header.php");
+// Obtém todos os pedidos do banco de dados
 $stmt = $pdo->prepare("SELECT * FROM pedidos ORDER BY data_pedido DESC");
 $stmt->execute();
 $pedidos = $stmt->fetchAll();
@@ -13,7 +13,7 @@ $pedidos = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Pedidos</title>
+    <title>Administração de Pedidos</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -38,12 +38,15 @@ $pedidos = $stmt->fetchAll();
             font-size: 2.5em;
             color: #333;
             margin-bottom: 30px;
+            font-weight: 600;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         th, td {
@@ -56,37 +59,60 @@ $pedidos = $stmt->fetchAll();
             background-color: #007bff;
             color: white;
             font-weight: bold;
+            text-transform: uppercase;
         }
 
         td {
             background-color: #fafafa;
             font-size: 1em;
+            color: #555;
         }
 
         .status {
             color: #333;
             font-weight: bold;
+            text-transform: capitalize;
         }
 
         .status.pendente {
-            color: orange;
+            color: #ff9800;
         }
 
         .status.pago {
-            color: green;
+            color: #4caf50;
         }
 
         .status.cancelado {
-            color: red;
+            color: #f44336;
         }
 
-        a {
+        .actions a {
             text-decoration: none;
-            color: #007bff;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+            padding: 6px 10px;
+            border-radius: 5px;
+            margin-right: 10px;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .actions a.ver-detalhes {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .actions a.atualizar-status {
+            background-color: #ff9800;
+            color: white;
+        }
+
+        .actions a.cancelar-pedido {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .actions a:hover {
+            opacity: 0.8;
         }
 
         button {
@@ -106,14 +132,57 @@ $pedidos = $stmt->fetchAll();
         button:hover {
             background-color: #0056b3;
         }
+
+        .empty-message {
+            text-align: center;
+            font-size: 1.2em;
+            color: #888;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            width: 300px;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                padding: 20px;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            .actions {
+                display: block;
+                text-align: center;
+            }
+
+            .actions a {
+                margin: 5px 0;
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
+    <br><br><br><br>
     <div class="container">
-        <h1>Meus Pedidos</h1>
+        <h1>Administração de Pedidos</h1>
 
         <?php if (empty($pedidos)): ?>
-            <p>Você ainda não fez nenhum pedido. <a href="index.php">Clique aqui</a> para fazer seu primeiro pedido.</p>
+            <p class="empty-message">Não há pedidos registrados no momento.</p>
         <?php else: ?>
             <table>
                 <thead>
@@ -121,7 +190,7 @@ $pedidos = $stmt->fetchAll();
                         <th>ID do Pedido</th>
                         <th>Data do Pedido</th>
                         <th>Status</th>
-                        <th>Detalhes</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,7 +201,10 @@ $pedidos = $stmt->fetchAll();
                             <td class="status <?php echo strtolower($pedido['status']); ?>">
                                 <?php echo ucfirst($pedido['status']); ?>
                             </td>
-                            <td><a href="detalhes_pedido.php?id=<?php echo $pedido['id']; ?>">Ver Detalhes</a></td>
+                            <td class="actions">
+                                <a href="detalhes_pedido.php?id=<?php echo $pedido['id']; ?>" class="ver-detalhes">Ver Detalhes</a>
+                                <a href="atualizar_status.php?id=<?php echo $pedido['id']; ?>" class="atualizar-status">Atualizar Status</a>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -140,8 +212,11 @@ $pedidos = $stmt->fetchAll();
         <?php endif; ?>
         
         <a href="index.php">
-            <button>Voltar para o inicio </button>
+            <button>Voltar para a Loja</button>
         </a>
     </div>
+
+    <?php include("footer.php"); ?>                
+
 </body>
 </html>

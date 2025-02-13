@@ -22,7 +22,6 @@ $lanches = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Venda de Lanches</title>
-    <link rel="stylesheet" href="css/estilo.css">
     <style>
     /* Estilização do banner */
 /* Resetando alguns estilos padrão */
@@ -43,12 +42,6 @@ body {
 .banner {
     width: 100%;
     height: 600px; /* Reduzido um pouco */
-    object-fit: cover;
-    transition: transform 0.8s ease-in-out;
-}
-
-.banner:hover {
-    transform: scale(1.05);
 }
 
 /* Grid responsivo para os produtos */

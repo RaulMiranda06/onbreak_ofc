@@ -220,7 +220,7 @@ if (isset($_GET['action']) && $_GET['action'] == "remove" && isset($_GET['id']))
 
                 <div class="finalizar-container">
                     <button type="submit" name="update_cart" class="botaoatualizar">Atualizar Carrinho</button>
-                    <a href="finalizar.php" class="button">Finalizar Compra</a>
+                    <a href="checkout.php" class="button">Finalizar Compra</a>
                 </div>
             </form>
         <?php else: ?>

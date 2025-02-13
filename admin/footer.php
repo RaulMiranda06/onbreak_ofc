@@ -1,57 +1,40 @@
 <!-- Includes/footer.php -->
 <footer>
     <style>
+        /* Resetando a margem e altura da página para garantir um layout limpo */
+        html, body {
+            height: 100%; /* Faz o body ocupar toda a altura da tela */
+            margin: 0; /* Remove a margem padrão */
+            font-family: Arial, sans-serif; /* Fonte simples */
+        }
+
+        /* O rodapé será posicionado na parte inferior da tela */
         footer {
-            background: #f8f9fa; /* Cor clara */
-            color: #333; /* Texto escuro para contraste */
-            padding: 20px 0;
-            text-align: center;
-            font-size: 14px;
-            border-top: 2px solid #ddd; /* Linha sutil no topo */
+            background-color: #f9f9f9; /* Cor de fundo clara */
+            color: #333; /* Cor do texto mais escura para contraste */
+            padding: 20px; /* Espaçamento interno */
+            text-align: center; /* Alinha o texto no centro */
+            position: fixed; /* Fixa o rodapé na parte inferior */
+            bottom: 0; /* Coloca o rodapé na parte inferior da tela */
+            width: 100%; /* O rodapé ocupa toda a largura da tela */
+            border-top: 2px solid #ccc; /* Borda superior fina e clara */
         }
 
         .footer-container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            max-width: 1000px; /* Limita a largura para o conteúdo não ficar muito largo */
+            margin: 0 auto; /* Centraliza o conteúdo dentro do rodapé */
         }
 
-        .footer-left, .footer-right {
-            flex: 1;
-            min-width: 250px;
-            text-align: center;
-        }
-
-        .footer-right a {
-            color: #007bff; /* Azul para links */
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .footer-right a:hover {
-            color: #0056b3; /* Azul mais escuro ao passar o mouse */
-        }
-
-        @media (max-width: 600px) {
-            .footer-container {
-                flex-direction: column;
-            }
+        .footer p {
+            margin: 0; /* Remove a margem padrão do parágrafo */
+            font-size: 14px; /* Define um tamanho de fonte adequado */
         }
     </style>
 
     <div class="footer-container">
-        <!-- Parte esquerda do rodapé -->
-        <div class="footer-left">
+        <!-- Parte do rodapé com a mensagem de copyright -->
+        <div class="footer">
             <p>&copy; 2025 OnBreak Lanches. Todos os direitos reservados.</p>
-        </div>
-
-        <!-- Parte direita do rodapé -->
-        <div class="footer-right">
-            <p><a href="mailto:contato@onbreak.com">contato@onbreak.com</a></p>
         </div>
     </div>
 </footer>

@@ -2,10 +2,29 @@
 session_start();
 include("includes/conexao.php");
 
-// Verifica se há pedidos para o usuário
-$stmt = $pdo->prepare("SELECT * FROM pedidos ORDER BY data_pedido DESC");
-$stmt->execute();
-$pedidos = $stmt->fetchAll();
+// Verifica se o parâmetro 'id' foi passado pela URL
+if (!isset($_GET['id'])) {
+    header("Location: meus_pedidos.php");  // Redireciona para a página de pedidos se o id não for passado
+    exit;
+}
+
+$pedido_id = $_GET['id'];
+
+// Obtém os detalhes do pedido
+$stmt = $pdo->prepare("SELECT * FROM pedidos WHERE id = ?");
+$stmt->execute([$pedido_id]);
+$pedido = $stmt->fetch();
+
+// Verifica se o pedido existe
+if (!$pedido) {
+    echo "Pedido não encontrado.";
+    exit;
+}
+
+// Obtém os itens do pedido
+$stmt = $pdo->prepare("SELECT * FROM pedido_itens WHERE pedido_id = ?");
+$stmt->execute([$pedido_id]);
+$itens = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +32,7 @@ $pedidos = $stmt->fetchAll();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Pedidos</title>
+    <title>Detalhes do Pedido #<?php echo $pedido['id']; ?></title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -110,37 +129,44 @@ $pedidos = $stmt->fetchAll();
 </head>
 <body>
     <div class="container">
-        <h1>Meus Pedidos</h1>
+        <h1>Detalhes do Pedido #<?php echo $pedido['id']; ?></h1>
 
-        <?php if (empty($pedidos)): ?>
-            <p>Você ainda não fez nenhum pedido. <a href="index.php">Clique aqui</a> para fazer seu primeiro pedido.</p>
-        <?php else: ?>
-            <table>
-                <thead>
+        <p><strong>Data do Pedido:</strong> <?php echo date('d/m/Y H:i', strtotime($pedido['data_pedido'])); ?></p>
+        <p><strong>Status do Pedido:</strong> <span class="status <?php echo strtolower($pedido['status']); ?>"><?php echo ucfirst($pedido['status']); ?></span></p>
+
+        <h2>Itens do Pedido</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $total = 0;
+                foreach ($itens as $item):
+                    $subtotal = $item['preco'] * $item['quantidade'];
+                    $total += $subtotal;
+                ?>
                     <tr>
-                        <th>ID do Pedido</th>
-                        <th>Data do Pedido</th>
-                        <th>Status</th>
-                        <th>Detalhes</th>
+                        <td><?php echo htmlspecialchars($item['nome_lanche']); ?></td>
+                        <td>R$ <?php echo number_format($item['preco'], 2, ',', '.'); ?></td>
+                        <td><?php echo $item['quantidade']; ?></td>
+                        <td>R$ <?php echo number_format($subtotal, 2, ',', '.'); ?></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($pedidos as $pedido): ?>
-                        <tr>
-                            <td>#<?php echo $pedido['id']; ?></td>
-                            <td><?php echo date('d/m/Y H:i', strtotime($pedido['data_pedido'])); ?></td>
-                            <td class="status <?php echo strtolower($pedido['status']); ?>">
-                                <?php echo ucfirst($pedido['status']); ?>
-                            </td>
-                            <td><a href="detalhes_pedido.php?id=<?php echo $pedido['id']; ?>">Ver Detalhes</a></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-        
-        <a href="index.php">
-            <button>Voltar para o inicio </button>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+
+        <div class="total-price">
+            <strong>Total:</strong> R$ <?php echo number_format($total, 2, ',', '.'); ?>
+        </div>
+
+        <a href="meus_pedidos.php">
+            <button>Voltar para Meus Pedidos</button>
         </a>
     </div>
 </body>
