@@ -29,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($imagem['error']) {
                 $mensagem = exibirMensagem('Falha ao enviar o arquivo de imagem. Erro: ' . $imagem['error'], 'error');
             } else {
-                // Verifique o tamanho do arquivo (máximo 5MB)
-                if ($imagem['size'] > 5097152) {
+                // Verifique o tamanho do arquivo (máximo 15MB)
+                if ($imagem['size'] > 15097152) {
                     $mensagem = exibirMensagem('O arquivo de imagem é muito grande. O tamanho máximo permitido é 5MB.', 'error');
                 } else {
                     // Valide o tipo de arquivo (apenas imagens jpg e png)

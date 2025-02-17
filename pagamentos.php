@@ -20,14 +20,21 @@ if (!$pedido) {
     exit;
 }
 
-// Atualiza o status do pedido para "Aguardando Pagamento"
+// Atualiza o status do pedido para "Aguardando Pagamento" ou "Pago" conforme o método de pagamento
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pagamento = $_POST['pagamento']; // Método de pagamento escolhido
 
     try {
+        // Define o status do pedido com base no método de pagamento
+        if ($pagamento === "Pix" || $pagamento === "Cartão de Crédito") {
+            $status = "Pago"; // Se for Pix ou Cartão de Crédito, o status é 'Pago'
+        } else {
+            $status = "Pendente"; // Se for Dinheiro, o status é 'Pendente'
+        }
+
         // Atualiza o status do pedido e registra o método de pagamento
-        $stmt = $pdo->prepare("UPDATE pedidos SET status = 'Aguardando Pagamento', pagamento = ? WHERE id = ?");
-        $stmt->execute([$pagamento, $pedido_id]);
+        $stmt = $pdo->prepare("UPDATE pedidos SET status = ?, pagamento = ? WHERE id = ?");
+        $stmt->execute([$status, $pagamento, $pedido_id]);
 
         // Redireciona para a página de confirmação ou agradecimento
         header("Location: obrigado.php");
